@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:vietnam091945@localhost:3306/chemical_db?connection_limit=10&pool_timeout=4"
+}
+
+model Categorie {
+  id               String             @id @default(uuid())
+  name             String
+  type             String?
+  ProductCategorie ProductCategorie[]
+}
+
+model Product {
+  id               String             @id @default(uuid())
+  name             String
+  title            String?
+  description      String?
+  blog             String?
+  datafiles        DataFile[]
+  ProductCategorie ProductCategorie[]
+}
+
+model DataFile {
+  id        String   @id @default(uuid())
+  name      String
+  link      String
+  type      String
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String?
+}
+
+model ProductCategorie {
+  productId   String
+  categorieId String
+  product     Product?   @relation(fields: [productId], references: [id])
+  categorie   Categorie? @relation(fields: [categorieId], references: [id])
+
+  @@id([categorieId, productId])
+}
