@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import CategorieCotroller from './categorie.controller'
+import CategorieCotroller from '../modules/categorieModule/categorie.controller'
 const router = Router()
 
 router.post('/create', CategorieCotroller.createCategorie)

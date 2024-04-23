@@ -16,3 +16,15 @@ export const errorHandlingMiddleware = (err: any, req: Request, res: Response, n
   }
   return res.status(responseError.statusCode).json(responseError)
 }
+export const errAsyncHandlerMiddleware = (
+  asyncFun: (req: Request, res: Response, next: NextFunction) => Promise<any>
+) => {
+  const handleErr = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await asyncFun(req, res, next)
+    } catch (error: any) {
+      next(error)
+    }
+  }
+  return handleErr
+}
