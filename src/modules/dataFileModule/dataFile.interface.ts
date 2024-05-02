@@ -1,8 +1,12 @@
+import { IProduct } from '../productModule/product.interface'
+
 export type TFileType = 'Video' | 'Image' | 'Document'
-export interface IDataFileAttributes {
+
+export interface IDataFile {
   id: string
   name: string
   link: string
   type: TFileType
-  productId: string
+  product?: IProduct | null
+  productId?: string | null
 }
