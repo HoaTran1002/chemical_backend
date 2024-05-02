@@ -2,10 +2,14 @@ import { Router } from 'express'
 import ProductCotroller from '../modules/productModule/product.controller'
 import { errAsyncHandlerMiddleware } from '~/middleware/errorHandlingMiddleware'
 import { uploadMemory } from '~/middleware/multer.middleware'
+import { validator } from '~/middleware/validate.middleware'
+import { productValidate } from '~/validator/product.validator'
+import { IProduct } from '~/modules/productModule/product.interface'
 const router = Router()
 
 router.post(
   '/create',
+  validator<IProduct>(productValidate),
   uploadMemory.fields([
     { name: 'image', maxCount: 1 },
     { name: 'video', maxCount: 1 }
