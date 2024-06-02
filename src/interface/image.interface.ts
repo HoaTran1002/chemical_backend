@@ -1,3 +1,3 @@
-export interface UploadedFiles {
+export interface IUploadedFiles {
   [key: string]: Express.Multer.File[]
 }
