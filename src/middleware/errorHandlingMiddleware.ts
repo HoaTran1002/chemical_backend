@@ -14,7 +14,7 @@ export const errorHandlingMiddleware = (err: any, req: Request, res: Response, n
   if (process.env.NODE_ENV === 'development') {
     responseError.stack = err.stack
   }
-  return res.status(responseError.statusCode).json(responseError)
+  return res.status(responseError.statusCode).json({ err: responseError })
 }
 export const errAsyncHandlerMiddleware = (
   asyncFun: (req: Request, res: Response, next: NextFunction) => Promise<any>

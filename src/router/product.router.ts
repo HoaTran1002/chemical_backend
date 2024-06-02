@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import ProductCotroller from '../modules/productModule/product.controller'
 import { errAsyncHandlerMiddleware } from '~/middleware/errorHandlingMiddleware'
-import { multerErrorHandler, uploadMemory } from '~/middleware/multer.middleware'
+import { checkFileSize, uploadMemory } from '~/middleware/multer.middleware'
 import { validator } from '~/middleware/validate.middleware'
 import { productValidate } from '~/validator/product.validator'
 import { IProduct } from '~/modules/productModule/product.interface'
@@ -11,10 +11,10 @@ router.post(
   '/create',
   validator<IProduct>(productValidate),
   uploadMemory.fields([
-    { name: 'image', maxCount: 10 },
+    { name: 'image', maxCount: 3 },
     { name: 'video', maxCount: 5 }
   ]),
-  multerErrorHandler,
+  checkFileSize,
   errAsyncHandlerMiddleware(ProductCotroller.createProduct)
 )
 router.get('/get/:id', errAsyncHandlerMiddleware(ProductCotroller.getByIdProduct))
