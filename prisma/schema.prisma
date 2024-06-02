@@ -36,7 +36,7 @@ model DataFile {
   link      String
   type      String
   product   Product? @relation(fields: [productId], references: [id])
-  productId String?
+  productId String?  @default("")
 }
 
 model ProductCategorie {

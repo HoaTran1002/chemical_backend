@@ -1,4 +1,5 @@
 import { ICategorie } from '../categorieModule/categorie.interface'
+import { IDataFile } from '../dataFileModule/dataFile.interface'
 
 interface IProduct {
   id: string

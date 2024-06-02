@@ -8,8 +8,8 @@ class ProductCotroller {
   async createProduct(req: Request<any, unknown, IProduct>, res: Response) {
     const files = req.files as IUploadedFiles
     const reqBody = req.body
-    await productService.productCreateProcess({ files: files, payload: reqBody })
-    return res.json(reqBody)
+    const result = await productService.productAndFileInitializationProcess({ files: files, payload: reqBody })
+    return res.json(result)
   }
   async getByIdProduct(req: Request, res: Response) {}
   async getAllProduct(req: Request, res: Response, next: NextFunction): Promise<void> {
