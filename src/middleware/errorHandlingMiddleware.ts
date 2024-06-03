@@ -1,5 +1,6 @@
 import { StatusCodes } from 'http-status-codes'
 import { NextFunction, Request, Response } from 'express'
+import multer from 'multer'
 
 export const errorHandlingMiddleware = (err: any, req: Request, res: Response, next: NextFunction) => {
   if (!err.statusCode) {
@@ -9,6 +10,11 @@ export const errorHandlingMiddleware = (err: any, req: Request, res: Response, n
   const responseError: { statusCode: number; message: string; stack?: string } = {
     statusCode: err.statusCode,
     message: err.message || StatusCodes[err.statusCode]
+  }
+  if (err instanceof multer.MulterError) {
+    // Or any other appropriate status code
+    responseError.statusCode = 400
+    responseError.message = err.message
   }
   // Xử lý stack trace chỉ khi ở chế độ phát triển
   if (process.env.NODE_ENV === 'development') {

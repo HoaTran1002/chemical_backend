@@ -19,7 +19,12 @@ class ProductCotroller {
       }, 1000)
     })
   }
-  async updateProduct(req: Request, res: Response) {}
+  async updateProduct(req: Request, res: Response) {
+    const files = req.files as IUploadedFiles
+    const reqBody = req.body
+    const result = await productService.productUpdateById({ files: files, payload: reqBody })
+    return res.json(result)
+  }
   async removeProduct(req: Request, res: Response) {}
 }
 export default new ProductCotroller()

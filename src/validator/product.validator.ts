@@ -11,3 +11,13 @@ export const productValidate = (data: IProduct) => {
   })
   return product.validate(data)
 }
+export const productUpdateValidate = (data: IProduct) => {
+  const product = Joi.object({
+    id: Joi.string().trim().required(),
+    name: Joi.string(),
+    title: Joi.string(),
+    description: Joi.string(),
+    blog: Joi.string()
+  })
+  return product.validate(data)
+}

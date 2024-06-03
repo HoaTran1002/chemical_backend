@@ -41,35 +41,39 @@ export const uploadMemory = multer({
 // })
 
 // Middleware để kiểm tra kích thước tệp tin
-export const checkFileSize = (req: Request, res: Response, next: NextFunction) => {
-  const files = req.files as { [fieldname: string]: Express.Multer.File[] }
+export const checkFile = (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (req.files) {
+      const files = req.files as { [fieldname: string]: Express.Multer.File[] }
+      let totalSize = 0
 
-  let totalSize = 0
-
-  if (files['image']) {
-    files['image'].forEach((file) => {
-      if (file.size > 5 * 1024 * 1024) {
-        // 5MB
-        throw new ApiError(400, `Image file size should not exceed 5MB. File ${file.originalname} is too large.`)
+      if (files['image']) {
+        files['image'].forEach((file) => {
+          if (file.size > 5 * 1024 * 1024) {
+            // 5MB
+            throw new ApiError(400, `Image file size should not exceed 5MB. File ${file.originalname} is too large.`)
+          }
+          totalSize += file.size
+        })
       }
-      totalSize += file.size
-    })
-  }
 
-  if (files['video']) {
-    files['video'].forEach((file) => {
-      if (file.size > 200 * 1024 * 1024) {
-        // 200MB
-        throw new ApiError(400, `Video file size should not exceed 200MB. File ${file.originalname} is too large.`)
+      if (files['video']) {
+        files['video'].forEach((file) => {
+          if (file.size > 200 * 1024 * 1024) {
+            // 200MB
+            throw new ApiError(400, `Video file size should not exceed 200MB. File ${file.originalname} is too large.`)
+          }
+          totalSize += file.size
+        })
       }
-      totalSize += file.size
-    })
-  }
 
-  if (totalSize > 500 * 1024 * 1024) {
-    // 500MB
-    throw new ApiError(400, 'Total file size should not exceed 500MB.')
+      if (totalSize > 500 * 1024 * 1024) {
+        // 500MB
+        throw new ApiError(400, 'Total file size should not exceed 500MB.')
+      }
+    }
+    next()
+  } catch (error: any) {
+    next(new ApiError(400, error.message))
   }
-
-  next()
 }
