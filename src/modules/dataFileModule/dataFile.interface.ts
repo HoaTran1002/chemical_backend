@@ -7,6 +7,5 @@ export interface IDataFile {
   name: string
   link: string
   type: string
-  product?: IProduct | undefined
   productId?: string | undefined
 }

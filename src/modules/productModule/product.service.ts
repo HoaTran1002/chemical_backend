@@ -9,7 +9,10 @@ interface IBodyProduct {
   files?: IUploadedFiles
   payload: IProduct
 }
-
+export interface IProductResponse extends IProduct {
+  images: IDataFile[]
+  videos: IDataFile[]
+}
 class ProductServices {
   private prisma: PrismaClient
   constructor() {
@@ -51,10 +54,11 @@ class ProductServices {
                 const file: IDataFile = {
                   name: videoUpload.name,
                   link: videoUpload.url,
-                  type: prams.files.image[i].mimetype.toString()
+                  type: prams.files.video[i].mimetype.toString()
                 }
                 fileUploaded.push(file)
-                console.log('image link:', videoUpload.url)
+                console.log('video link:', videoUpload.url)
+                console.log('video type:', prams.files.video[i].mimetype.toString())
               }
             }
           }
@@ -142,6 +146,37 @@ class ProductServices {
         deleteFileService(fileUploaded)
       }
       throw new ApiError(400, error.message)
+    }
+  }
+  async productDataAccessProcess(prams: { id: string }): Promise<IProductResponse> {
+    try {
+      return (await this.prisma.$transaction(async () => {
+        const productRecord: IProduct = (await this.prisma.product.findUnique({
+          where: { id: prams.id }
+        })) as IProduct
+        const images: IDataFile[] = (await this.prisma.dataFile.findMany({
+          where: { productId: prams.id, type: { startsWith: 'image/' } }
+        })) as IDataFile[]
+        const videos: IDataFile[] = (await this.prisma.dataFile.findMany({
+          where: { productId: prams.id, type: { startsWith: 'video/' } }
+        })) as IDataFile[]
+        return {
+          ...productRecord,
+          images,
+          videos
+        } as IProductResponse
+      })) as IProductResponse
+    } catch (error: any) {
+      throw new ApiError(400, error.message)
+    }
+  }
+  async productDeleteByIdProcess(prams: { id: string }) {
+    try {
+      const result = this.prisma.$transaction(async () => {
+        
+      })
+    } catch (error) {
+      console.log(error)
     }
   }
 }

@@ -21,3 +21,9 @@ export const productUpdateValidate = (data: IProduct) => {
   })
   return product.validate(data)
 }
+export const checkProductId = (data: { id: string }) => {
+  const product = Joi.object({
+    id: Joi.string().trim().required()
+  })
+  return product.validate(data)
+}
