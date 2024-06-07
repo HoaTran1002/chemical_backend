@@ -30,7 +30,7 @@ router.patch(
 router.post('/getById', validator<IProduct>(checkProductId), errAsyncHandlerMiddleware(ProductCotroller.getByIdProduct))
 router.get('/getAll', errAsyncHandlerMiddleware(ProductCotroller.getAllProduct))
 router.delete(
-  '/delete/:id',
+  '/deleteById',
   validator<IProduct>(checkProductId),
   errAsyncHandlerMiddleware(ProductCotroller.deleteProductById)
 )

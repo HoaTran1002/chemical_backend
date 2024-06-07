@@ -33,11 +33,17 @@ export const deleteFileService = async (files: IDataFile[]): Promise<void> => {
   const storage = getStorage()
 
   try {
-    for (const file of files) {
+    const deletePromises = files.map(async (file) => {
       const storageRef = ref(storage, `files/${file.name}`)
-      await deleteObject(storageRef)
-      console.log(`File ${file.name} deleted successfully`)
-    }
+      return deleteObject(storageRef)
+        .then(() => console.log(`File ${file.name} deleted successfully`))
+        .catch((error) => {
+          console.error(`Error deleting file ${file.name}:`, error)
+          throw new Error(`Failed to delete file ${file.name}`)
+        })
+    })
+
+    await Promise.all(deletePromises)
   } catch (error) {
     console.error('Error deleting file:', error)
     throw new Error('Failed to delete file')

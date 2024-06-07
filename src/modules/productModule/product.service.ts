@@ -170,13 +170,23 @@ class ProductServices {
       throw new ApiError(400, error.message)
     }
   }
-  async productDeleteByIdProcess(prams: { id: string }) {
+  async productDeleteByIdProcess(prams: { id: string }): Promise<any> {
     try {
       const result = this.prisma.$transaction(async () => {
-        
+        const dataFiles: IDataFile[] = (await this.prisma.dataFile.findMany({
+          where: { productId: prams.id }
+        })) as unknown as IDataFile[]
+        if (Array.isArray(dataFiles) && dataFiles.length > 0) {
+          await deleteFileService(dataFiles)
+          const deletePromises = dataFiles.map((item) => this.prisma.dataFile.delete({ where: { id: item.id } }))
+          await Promise.all(deletePromises)
+        }
+        console.log('Product and related DataFiles deleted successfully.')
+        return await this.prisma.product.delete({ where: { id: prams.id } })
       })
-    } catch (error) {
-      console.log(error)
+      return result
+    } catch (error: any) {
+      throw new ApiError(400, error.message)
     }
   }
 }
