@@ -176,11 +176,26 @@ class ProductServices {
     }
   }
   async pagination(params: IPagiNationParams) {
+    if (params.currentPage <= 0) {
+      return {
+        productsPageCurrent: [],
+        nextPage: null,
+        prePage: null,
+        totalPage: 0
+      }
+    }
     const result = await this.prisma.$transaction(async () => {
       const productTotal = await this.prisma.product.count()
       const totalPage = Math.ceil(productTotal / params.pageSize)
       const skipRecord = (params.currentPage - 1) * params.pageSize
-
+      if (params.currentPage > totalPage) {
+        return {
+          productsPageCurrent: [],
+          nextPage: null,
+          prePage: null,
+          totalPage: totalPage
+        }
+      }
       const products = await this.prisma.product.findMany({
         skip: skipRecord,
         take: params.pageSize,
