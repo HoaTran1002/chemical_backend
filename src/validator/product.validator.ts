@@ -1,5 +1,6 @@
 import Joi from 'joi'
 import { IProduct } from '~/modules/productModule/product.interface'
+import { IPagiNationParams } from '~/modules/productModule/product.service'
 
 export const productValidate = (data: IProduct) => {
   const product = Joi.object({
@@ -24,6 +25,13 @@ export const productUpdateValidate = (data: IProduct) => {
 export const checkProductId = (data: { id: string }) => {
   const product = Joi.object({
     id: Joi.string().trim().required()
+  })
+  return product.validate(data)
+}
+export const productPagiNationParams = (data: IPagiNationParams) => {
+  const product = Joi.object({
+    pageSize: Joi.number().required(),
+    currentPage: Joi.number().required()
   })
   return product.validate(data)
 }

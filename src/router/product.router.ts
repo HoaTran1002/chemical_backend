@@ -3,8 +3,14 @@ import ProductCotroller from '../modules/productModule/product.controller'
 import { errAsyncHandlerMiddleware } from '~/middleware/errorHandlingMiddleware'
 import { checkFile, uploadMemory } from '~/middleware/multer.middleware'
 import { validator } from '~/middleware/validate.middleware'
-import { checkProductId, productUpdateValidate, productValidate } from '~/validator/product.validator'
+import {
+  checkProductId,
+  productPagiNationParams,
+  productUpdateValidate,
+  productValidate
+} from '~/validator/product.validator'
 import { IProduct } from '~/modules/productModule/product.interface'
+import { IPagiNationParams } from '~/modules/productModule/product.service'
 const router = Router()
 
 router.post(
@@ -28,7 +34,11 @@ router.patch(
   errAsyncHandlerMiddleware(ProductCotroller.updateProduct)
 )
 router.post('/getById', validator<IProduct>(checkProductId), errAsyncHandlerMiddleware(ProductCotroller.getByIdProduct))
-router.get('/getAll', errAsyncHandlerMiddleware(ProductCotroller.getAllProduct))
+router.get(
+  '/pagination',
+  validator<IPagiNationParams>(productPagiNationParams),
+  errAsyncHandlerMiddleware(ProductCotroller.pagination)
+)
 router.delete(
   '/deleteById',
   validator<IProduct>(checkProductId),

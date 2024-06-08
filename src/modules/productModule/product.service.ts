@@ -9,6 +9,10 @@ interface IBodyProduct {
   files?: IUploadedFiles
   payload: IProduct
 }
+export interface IPagiNationParams {
+  pageSize: number
+  currentPage: number
+}
 export interface IProductResponse extends IProduct {
   images: IDataFile[]
   videos: IDataFile[]
@@ -85,6 +89,7 @@ class ProductServices {
       throw new ApiError(400, error.message)
     }
   }
+
   async productUpdateById(prams: IBodyProduct): Promise<IProduct> {
     const fileUploaded: IDataFile[] = []
     try {
@@ -170,6 +175,36 @@ class ProductServices {
       throw new ApiError(400, error.message)
     }
   }
+  async pagination(params: IPagiNationParams) {
+    const result = await this.prisma.$transaction(async () => {
+      const productTotal = await this.prisma.product.count()
+      const totalPage = Math.ceil(productTotal / params.pageSize)
+      const skipRecord = (params.currentPage - 1) * params.pageSize
+
+      const products = await this.prisma.product.findMany({
+        skip: skipRecord,
+        take: params.pageSize,
+        orderBy: { id: 'asc' }
+      })
+
+      const nextPage = params.currentPage + 1 <= totalPage ? params.currentPage + 1 : null
+      const prePage = params.currentPage - 1 > 0 ? params.currentPage - 1 : null
+      const productsPageCurrent = await Promise.all(
+        products.map(async (product) => {
+          return await this.productDataAccessProcess({ id: product.id })
+        })
+      )
+      return {
+        productsPageCurrent,
+        nextPage,
+        prePage,
+        totalPage
+      }
+    })
+
+    return result
+  }
+
   async productDeleteByIdProcess(prams: { id: string }): Promise<any> {
     try {
       const result = this.prisma.$transaction(async () => {
