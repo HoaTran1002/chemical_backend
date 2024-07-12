@@ -40,7 +40,7 @@ services:
       retries: 3
   nginx:
     depends_on:
-      app:
+      - app
     image: nginx:latest
     container_name: chemical_nginx
     ports:
