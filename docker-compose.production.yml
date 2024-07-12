@@ -33,6 +33,11 @@ services:
       - .env
     networks:
       - chemical_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
   nginx:
     image: nginx:latest
     container_name: chemical_nginx
@@ -45,6 +50,11 @@ services:
       - app
     networks:
       - chemical_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 volumes:
   db_data:
 
