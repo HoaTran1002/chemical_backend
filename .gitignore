@@ -1,5 +1,7 @@
 node_modules
 # Keep environment variables out of version control
-# .env
-# src/config/
-# prisma/
+.env
+src/config/
+prisma/
+DockerFile
+docker-compose.yml

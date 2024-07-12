@@ -23,14 +23,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    build: .
+    image: hoatran1002/chemical_app:v1
     container_name: chemical_app
     working_dir: /app
     volumes:
       - ./:/app
       - /app/node_modules
-    ports:
-      - "3000:3000"
     env_file:
       - .env
     networks:
