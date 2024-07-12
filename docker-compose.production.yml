@@ -41,7 +41,6 @@ services:
   nginx:
     depends_on:
       app:
-        condition: service_healthy
     image: nginx:latest
     container_name: chemical_nginx
     ports:
