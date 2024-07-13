@@ -10,4 +10,8 @@ RUN npm install
 
 COPY . .
 
-CMD ["sh", "-c", "npx prisma migrate deploy --preview-feature && npx prisma generate && sleep 30 && npm start"]
+RUN npx prisma migrate deploy --preview-feature
+
+RUN npx prisma generate
+
+CMD ["sh", "-c", "sleep 30 && npm start"]
