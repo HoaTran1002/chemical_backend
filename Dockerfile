@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY package*.json ./
 
+RUN npm install -g prisma@5.12.1
+
 RUN npm install
 
 COPY . .
