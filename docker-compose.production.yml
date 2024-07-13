@@ -23,7 +23,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    image: hoatran1002/chemical_app:v4
+    image: hoatran1002/chemical_app:v5
     container_name: chemical_app
     working_dir: /app
     volumes:
