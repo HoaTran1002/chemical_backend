@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `Role` MODIFY `roleName` VARCHAR(191) NOT NULL DEFAULT 'nv';
+
+-- AlterTable
+ALTER TABLE `User` ALTER COLUMN `idRole` DROP DEFAULT;

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `User` MODIFY `idRole` VARCHAR(191) NOT NULL DEFAULT '';

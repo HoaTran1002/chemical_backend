@@ -3,14 +3,13 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:vietnam091945@db:3306/chemical_db?connection_limit=10&pool_timeout=4"
+  url      = "mysql://root:vietnam091945@localhost:3306/chemical_db?connection_limit=10&pool_timeout=4"
 }
 
 model Categorie {
@@ -46,4 +45,28 @@ model ProductCategorie {
   categorie   Categorie? @relation(fields: [categorieId], references: [id])
 
   @@id([categorieId, productId])
+}
+
+model Role {
+  id       String @id @default(uuid())
+  roleName String @unique @default("nv")
+  User     User[]
+}
+
+model User {
+  id           String         @id @default(uuid())
+  userName     String         @unique
+  passWord     String
+  idRole       String
+  role         Role           @relation(fields: [idRole], references: [id])
+  RefreshToken RefreshToken[]
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @db.Text
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
