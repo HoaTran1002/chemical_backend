@@ -23,8 +23,9 @@ const roleMiddleware = (allowedRoles: string[]) => {
       if (!user) {
         return res.status(401).json(new ApiError(401, 'Invalid token'))
       }
-
+      console.log(user.idRole)
       const userRole = user.role.roleName
+      console.log(userRole)
       if (!allowedRoles.includes(userRole)) {
         return res.status(403).json(new ApiError(403, 'Forbidden: You do not have the required role'))
       }

@@ -3,18 +3,46 @@ import CategorieCotroller from '../modules/categorieModule/categorie.controller'
 import { errAsyncHandlerMiddleware } from '~/middleware/errorHandlingMiddleware'
 import { ICategorie } from '~/modules/categorieModule/categorie.interface'
 import { validator } from '~/middleware/validate.middleware'
-import { categorieValidate } from '~/validator/categorie.validator'
+import { categorieUpdateValidate, categorieValidate, checkCategorieId } from '~/validator/categorie.validator'
+import roleMiddleware from '~/middleware/role.middleware'
+import authMiddleware from '~/middleware/auth.middleware'
 
 const router = Router()
 
 router.post(
   '/create',
   validator<ICategorie>(categorieValidate),
-  errAsyncHandlerMiddleware(CategorieCotroller.createCategorie)
+  authMiddleware,
+  roleMiddleware(['admin']),
+  errAsyncHandlerMiddleware(CategorieCotroller.createCategory)
 )
-router.get('/get/:id', CategorieCotroller.getByIdCategorie)
-router.get('/getAll', CategorieCotroller.getAllCategorie)
-router.patch('/update/:id', CategorieCotroller.updateCategorie)
-router.delete('/delete/:id', CategorieCotroller.removeCategorie)
+router.get(
+  '/get',
+  validator(checkCategorieId),
+  authMiddleware,
+  roleMiddleware(['admin']),
+  errAsyncHandlerMiddleware(CategorieCotroller.getCategoryById)
+)
+router.get(
+  '/getAll',
+  authMiddleware,
+  roleMiddleware(['admin']),
+  errAsyncHandlerMiddleware(CategorieCotroller.getAllCategories)
+)
+router.patch(
+  '/update',
+  validator<ICategorie>(categorieUpdateValidate),
+  validator(checkCategorieId),
+  authMiddleware,
+  roleMiddleware(['admin']),
+  errAsyncHandlerMiddleware(CategorieCotroller.updateCategory)
+)
+router.delete(
+  '/delete',
+  validator(checkCategorieId),
+  authMiddleware,
+  roleMiddleware(['admin']),
+  errAsyncHandlerMiddleware(CategorieCotroller.deleteCategory)
+)
 
 export default router

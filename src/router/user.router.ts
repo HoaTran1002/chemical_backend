@@ -3,7 +3,13 @@ import userController from '~/modules/userModule/user.controller'
 import { errAsyncHandlerMiddleware } from '~/middleware/errorHandlingMiddleware'
 import authMiddleware from '~/middleware/auth.middleware'
 import { validator } from '~/middleware/validate.middleware'
-import { registerValidate, loginValidate, refreshTokenValidate } from '~/validator/auth.validator'
+import {
+  registerValidate,
+  loginValidate,
+  refreshTokenValidate,
+  checkUserId,
+  updateValidate
+} from '~/validator/auth.validator'
 import { IUser } from '~/modules/userModule/user.interface'
 import roleMiddleware from '~/middleware/role.middleware'
 const router = Router()
@@ -14,27 +20,34 @@ router.post('/logout', authMiddleware, errAsyncHandlerMiddleware(userController.
 router.post('/refresh-token', validator(refreshTokenValidate), errAsyncHandlerMiddleware(userController.refreshToken))
 
 router.post(
-  '/users',
+  '/create',
+  validator<IUser>(registerValidate),
   authMiddleware,
   roleMiddleware(['admin']),
-  validator(registerValidate),
   errAsyncHandlerMiddleware(userController.createUser)
 )
 
 router.put(
-  '/users',
+  '/update',
+  validator<IUser>(updateValidate),
   authMiddleware,
   roleMiddleware(['admin']),
-  validator(registerValidate),
   errAsyncHandlerMiddleware(userController.updateUser)
 )
 
-router.delete('/users', authMiddleware, roleMiddleware(['admin']), errAsyncHandlerMiddleware(userController.deleteUser))
+router.delete(
+  '/delete',
+  validator(checkUserId),
+  authMiddleware,
+  roleMiddleware(['admin']),
+  errAsyncHandlerMiddleware(userController.deleteUser)
+)
 
-router.get('/users', authMiddleware, roleMiddleware(['admin']), errAsyncHandlerMiddleware(userController.getAllUsers))
+router.get('/getAll', authMiddleware, roleMiddleware(['admin']), errAsyncHandlerMiddleware(userController.getAllUsers))
 
 router.get(
-  '/users/id',
+  '/getById',
+  validator(checkUserId),
   authMiddleware,
   roleMiddleware(['admin']),
   errAsyncHandlerMiddleware(userController.getUserById)

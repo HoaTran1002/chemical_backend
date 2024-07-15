@@ -11,28 +11,39 @@ class UserServices {
   }
 
   async createUser(user: IUser): Promise<IUser> {
-    let role = await this.prisma.role.findFirst({ where: { roleName: 'nv' } })
-    if (!role) {
-      role = await this.prisma.role.create({
-        data: { roleName: 'nv' }
+    let role
+    console.log('user role id', user.idRole)
+    if (user.idRole) {
+      role = await this.prisma.role.findUnique({
+        where: { id: user.idRole }
       })
+      console.log('admin')
+    } else if (!role) {
+      role = await this.prisma.role.findFirst({
+        where: { roleName: 'nv' }
+      })
+
+      if (!role) {
+        role = await this.prisma.role.create({
+          data: { roleName: 'nv' }
+        })
+      }
+      console.log('nv')
     }
+
     const hashedPassword = await bcrypt.hash(user.passWord, 10)
 
     const data: any = {
       userName: user.userName,
-      passWord: hashedPassword
+      passWord: hashedPassword,
+      idRole: role ? role.id : ''
     }
 
-    if (role) {
-      data.idRole = role.id
-    } else {
-      data.idRole = ''
-    }
     console.log('data create user:', data)
     const record = await this.prisma.user.create({
       data
     })
+
     return record
   }
 
@@ -82,6 +93,11 @@ class UserServices {
   }
 
   async updateUser(id: string, userData: Partial<IUser>): Promise<IUser> {
+    if (userData.passWord) {
+      const hashedPassword = await bcrypt.hash(userData.passWord, 10)
+
+      userData.passWord = hashedPassword
+    }
     const user = await this.prisma.user.update({
       where: { id },
       data: userData
@@ -90,9 +106,22 @@ class UserServices {
   }
 
   async deleteUser(id: string): Promise<void> {
-    await this.prisma.user.delete({
-      where: { id }
-    })
+    try {
+      await this.prisma.$transaction(async (prisma) => {
+        await prisma.refreshToken.deleteMany({
+          where: { userId: id }
+        })
+
+        await prisma.user.delete({
+          where: { id: id }
+        })
+      })
+
+      console.log(`User with id ${id} has been deleted successfully.`)
+    } catch (error: any) {
+      console.error('Error deleting user:', error)
+      throw new ApiError(500, error.message)
+    }
   }
 
   async getAllUsers(): Promise<IUser[]> {

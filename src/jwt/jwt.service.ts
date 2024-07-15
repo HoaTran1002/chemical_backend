@@ -6,16 +6,16 @@ class JWTService {
   private refreshTokenSecret: string
 
   constructor() {
-    this.accessTokenSecret = env.SECRET_KEY_ACCESS_TOKEN || 'SECRET_KEY_ACCESS_TOKEN'
-    this.refreshTokenSecret = env.REFRESH_TOKEN_SECRET || 'REFRESH_TOKEN_SECRET'
+    this.accessTokenSecret = env.SECRET_KEY_ACCESS_TOKEN!
+    this.refreshTokenSecret = env.REFRESH_TOKEN_SECRET!
   }
 
   generateAccessToken(payload: object): string {
-    return jwt.sign(payload, this.accessTokenSecret, { expiresIn: '15s' })
+    return jwt.sign(payload, this.accessTokenSecret, { expiresIn: '15d' })
   }
 
   generateRefreshToken(payload: object): string {
-    return jwt.sign(payload, this.refreshTokenSecret, { expiresIn: '360' })
+    return jwt.sign(payload, this.refreshTokenSecret, { expiresIn: '360d' })
   }
 
   decodeAccessToken(token: string): jwt.JwtPayload | null {

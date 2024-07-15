@@ -15,8 +15,13 @@ datasource db {
 model Categorie {
   id               String             @id @default(uuid())
   name             String
-  type             String?
+  type             TypeCategorie
   ProductCategorie ProductCategorie[]
+}
+
+enum TypeCategorie {
+  FEATURE
+  GROUPH_CHEMICAL
 }
 
 model Product {

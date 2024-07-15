@@ -9,3 +9,18 @@ export const categorieValidate = (data: ICategorie) => {
   })
   return categorie.validate(data)
 }
+export const checkCategorieId = (data: { id: string }) => {
+  const product = Joi.object({
+    id: Joi.string().trim().required()
+  })
+  return product.validate(data)
+}
+export const categorieUpdateValidate = (data: ICategorie) => {
+  const schema = Joi.object({
+    id: Joi.string().uuid(),
+    name: Joi.string().optional().required(),
+    type: Joi.string().valid('FEATURE', 'GROUPH_CHEMICAL')
+  })
+
+  return schema.validate(data)
+}

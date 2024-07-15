@@ -1,25 +1,61 @@
-import { Request, Response } from 'express'
-import { IResonseObject } from '~/interface/response.interface'
+import { Request, Response, NextFunction } from 'express'
+import CategoryService from '~/modules/categorieModule/categorie.service'
+import ApiError from '~/utils/ApiError'
 import { ICategorie } from './categorie.interface'
-import CategoryServices from './categorie.service'
 
-class CategorieCotroller {
-  async createCategorie(
-    req: Request<unknown, unknown, ICategorie>,
-    res: Response
-  ): Promise<Response<IResonseObject> | void> {
-    const reqBody = req.body
-    const record = await CategoryServices.create(reqBody)
-    const response: IResonseObject = {
-      message: 'create success',
-      status: 200,
-      data: record
+class CategoryController {
+  async createCategory(req: Request, res: Response, next: NextFunction) {
+    try {
+      const categoryData: ICategorie = req.body
+      const newCategory = await CategoryService.createCategory(categoryData)
+      res.status(201).json(newCategory)
+    } catch (error) {
+      next(error)
     }
-    return res.status(200).json(response)
   }
-  getByIdCategorie(req: Request, res: Response) {}
-  getAllCategorie(req: Request, res: Response) {}
-  updateCategorie(req: Request, res: Response) {}
-  removeCategorie(req: Request, res: Response) {}
+
+  async getCategoryById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.body
+      const category = await CategoryService.getCategoryById(id)
+      if (!category) {
+        throw new ApiError(404, 'Category not found')
+      }
+      res.status(200).json(category)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async getAllCategories(req: Request, res: Response, next: NextFunction) {
+    try {
+      const categories = await CategoryService.getAllCategories()
+      res.status(200).json(categories)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async updateCategory(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.body
+      const categoryData: Partial<ICategorie> = req.body
+      const updatedCategory = await CategoryService.updateCategory(id, categoryData)
+      res.status(200).json(updatedCategory)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async deleteCategory(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.body
+      await CategoryService.deleteCategory(id)
+      res.status(204).send()
+    } catch (error) {
+      next(error)
+    }
+  }
 }
-export default new CategorieCotroller()
+
+export default new CategoryController()
