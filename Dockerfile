@@ -1,10 +1,10 @@
 FROM node:20
 
+RUN npm cache clean --force
+
 WORKDIR /app
 
 COPY package*.json ./
-
-RUN npm cache clean --force
 
 RUN npm install -g prisma@5.12.1
 
