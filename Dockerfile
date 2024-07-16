@@ -12,6 +12,7 @@ RUN npm prune
 RUN npm install -g prisma@5.12.1
 
 RUN npm install
+RUN npm install cors
 
 RUN npm install @types/cors --save-dev
 
