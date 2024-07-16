@@ -9,7 +9,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:vietnam091945@localhost:3306/chemical_db?connection_limit=10&pool_timeout=4"
+  url      = "mysql://root:vietnam091945@db:3306/chemical_db?connection_limit=10&pool_timeout=4"
 }
 
 model Categorie {
@@ -29,7 +29,7 @@ model Product {
   name             String
   title            String?
   description      String?
-  blog             String?
+  blog             String?            @db.Text
   datafiles        DataFile[]
   ProductCategorie ProductCategorie[]
 }
