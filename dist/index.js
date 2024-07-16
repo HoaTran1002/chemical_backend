@@ -13,9 +13,7 @@ var errorHandlingMiddleware_1 = require("./middleware/errorHandlingMiddleware");
 dotenv_1.default.config();
 var app = (0, express_1.default)();
 var corsOptions = {
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    origin: '*'
 };
 app.use((0, cors_1.default)(corsOptions));
 app.use(body_parser_1.default.urlencoded({ extended: true }));
