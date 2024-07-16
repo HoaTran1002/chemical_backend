@@ -1,16 +1,18 @@
 FROM node:20
 
-RUN npm cache clean --force
-
 WORKDIR /app
 
 COPY package*.json ./
 
+RUN npm cache clean --force
+
 RUN npm install -g prisma@5.12.1
 
-RUN npm i @types/cors
-
 RUN npm install
+
+RUN npm install @types/cors --save-dev
+
+
 
 COPY . .
 
