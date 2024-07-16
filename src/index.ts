@@ -9,9 +9,7 @@ dotenv.config()
 const app = express()
 
 const corsOptions = {
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: '*'
 }
 app.use(cors(corsOptions))
 app.use(bodyParser.urlencoded({ extended: true }))
