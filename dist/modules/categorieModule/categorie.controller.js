@@ -39,34 +39,124 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var categorie_service_1 = __importDefault(require("./categorie.service"));
-var CategorieCotroller = /** @class */ (function () {
-    function CategorieCotroller() {
+var categorie_service_1 = __importDefault(require("../../modules/categorieModule/categorie.service"));
+var ApiError_1 = __importDefault(require("../../utils/ApiError"));
+var CategoryController = /** @class */ (function () {
+    function CategoryController() {
     }
-    CategorieCotroller.prototype.createCategorie = function (req, res) {
+    CategoryController.prototype.createCategory = function (req, res, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var reqBody, record, response;
+            var categoryData, newCategory, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        reqBody = req.body;
-                        return [4 /*yield*/, categorie_service_1.default.create(reqBody)];
+                        _a.trys.push([0, 2, , 3]);
+                        categoryData = req.body;
+                        return [4 /*yield*/, categorie_service_1.default.createCategory(categoryData)];
                     case 1:
-                        record = _a.sent();
-                        response = {
-                            message: 'create success',
-                            status: 200,
-                            data: record
-                        };
-                        return [2 /*return*/, res.status(200).json(response)];
+                        newCategory = _a.sent();
+                        res.status(201).json(newCategory);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_1 = _a.sent();
+                        next(error_1);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
     };
-    CategorieCotroller.prototype.getByIdCategorie = function (req, res) { };
-    CategorieCotroller.prototype.getAllCategorie = function (req, res) { };
-    CategorieCotroller.prototype.updateCategorie = function (req, res) { };
-    CategorieCotroller.prototype.removeCategorie = function (req, res) { };
-    return CategorieCotroller;
+    CategoryController.prototype.getCategoryById = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var id, category, error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        id = req.body.id;
+                        return [4 /*yield*/, categorie_service_1.default.getCategoryById(id)];
+                    case 1:
+                        category = _a.sent();
+                        if (!category) {
+                            throw new ApiError_1.default(404, 'Category not found');
+                        }
+                        res.status(200).json(category);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_2 = _a.sent();
+                        next(error_2);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    CategoryController.prototype.getAllCategories = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var categories, error_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, categorie_service_1.default.getAllCategories()];
+                    case 1:
+                        categories = _a.sent();
+                        res.status(200).json(categories);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_3 = _a.sent();
+                        next(error_3);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    CategoryController.prototype.updateCategory = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var id, categoryData, updatedCategory, error_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        id = req.body.id;
+                        categoryData = req.body;
+                        return [4 /*yield*/, categorie_service_1.default.updateCategory(id, categoryData)];
+                    case 1:
+                        updatedCategory = _a.sent();
+                        res.status(200).json(updatedCategory);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_4 = _a.sent();
+                        next(error_4);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    CategoryController.prototype.deleteCategory = function (req, res, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var id, error_5;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        id = req.body.id;
+                        return [4 /*yield*/, categorie_service_1.default.deleteCategory(id)];
+                    case 1:
+                        _a.sent();
+                        res.status(204).send();
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_5 = _a.sent();
+                        next(error_5);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return CategoryController;
 }());
-exports.default = new CategorieCotroller();
+exports.default = new CategoryController();

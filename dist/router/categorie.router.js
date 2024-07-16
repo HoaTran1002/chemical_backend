@@ -8,10 +8,12 @@ var categorie_controller_1 = __importDefault(require("../modules/categorieModule
 var errorHandlingMiddleware_1 = require("../middleware/errorHandlingMiddleware");
 var validate_middleware_1 = require("../middleware/validate.middleware");
 var categorie_validator_1 = require("../validator/categorie.validator");
+var role_middleware_1 = __importDefault(require("../middleware/role.middleware"));
+var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
 var router = (0, express_1.Router)();
-router.post('/create', (0, validate_middleware_1.validator)(categorie_validator_1.categorieValidate), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(categorie_controller_1.default.createCategorie));
-router.get('/get/:id', categorie_controller_1.default.getByIdCategorie);
-router.get('/getAll', categorie_controller_1.default.getAllCategorie);
-router.patch('/update/:id', categorie_controller_1.default.updateCategorie);
-router.delete('/delete/:id', categorie_controller_1.default.removeCategorie);
+router.post('/create', (0, validate_middleware_1.validator)(categorie_validator_1.categorieValidate), auth_middleware_1.default, (0, role_middleware_1.default)(['admin']), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(categorie_controller_1.default.createCategory));
+router.get('/get', (0, validate_middleware_1.validator)(categorie_validator_1.checkCategorieId), auth_middleware_1.default, (0, role_middleware_1.default)(['admin']), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(categorie_controller_1.default.getCategoryById));
+router.get('/getAll', auth_middleware_1.default, (0, role_middleware_1.default)(['admin']), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(categorie_controller_1.default.getAllCategories));
+router.patch('/update', (0, validate_middleware_1.validator)(categorie_validator_1.categorieUpdateValidate), (0, validate_middleware_1.validator)(categorie_validator_1.checkCategorieId), auth_middleware_1.default, (0, role_middleware_1.default)(['admin']), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(categorie_controller_1.default.updateCategory));
+router.delete('/delete', (0, validate_middleware_1.validator)(categorie_validator_1.checkCategorieId), auth_middleware_1.default, (0, role_middleware_1.default)(['admin']), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(categorie_controller_1.default.deleteCategory));
 exports.default = router;

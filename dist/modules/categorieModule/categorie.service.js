@@ -37,26 +37,83 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var client_1 = require("@prisma/client");
-var CategoryServices = /** @class */ (function () {
-    function CategoryServices() {
+var CategoryService = /** @class */ (function () {
+    function CategoryService() {
+        this.prisma = new client_1.PrismaClient();
     }
-    CategoryServices.prototype.create = function (payload) {
+    CategoryService.prototype.createCategory = function (category) {
         return __awaiter(this, void 0, void 0, function () {
-            var prisma, newCategory;
+            var record;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        prisma = new client_1.PrismaClient();
-                        return [4 /*yield*/, prisma.categorie.create({
-                                data: payload
-                            })];
+                    case 0: return [4 /*yield*/, this.prisma.categorie.create({
+                            data: category
+                        })];
                     case 1:
-                        newCategory = _a.sent();
-                        return [2 /*return*/, newCategory];
+                        record = _a.sent();
+                        return [2 /*return*/, record];
                 }
             });
         });
     };
-    return CategoryServices;
+    CategoryService.prototype.getCategoryById = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var category;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.prisma.categorie.findUnique({
+                            where: { id: id }
+                        })];
+                    case 1:
+                        category = _a.sent();
+                        return [2 /*return*/, category];
+                }
+            });
+        });
+    };
+    CategoryService.prototype.getAllCategories = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var categories;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.prisma.categorie.findMany()];
+                    case 1:
+                        categories = _a.sent();
+                        return [2 /*return*/, categories];
+                }
+            });
+        });
+    };
+    CategoryService.prototype.updateCategory = function (id, categoryData) {
+        return __awaiter(this, void 0, void 0, function () {
+            var category;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.prisma.categorie.update({
+                            where: { id: id },
+                            data: categoryData
+                        })];
+                    case 1:
+                        category = _a.sent();
+                        return [2 /*return*/, category];
+                }
+            });
+        });
+    };
+    CategoryService.prototype.deleteCategory = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.prisma.categorie.delete({
+                            where: { id: id }
+                        })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    return CategoryService;
 }());
-exports.default = new CategoryServices();
+exports.default = new CategoryService();

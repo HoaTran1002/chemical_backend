@@ -1,0 +1,23 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var user_controller_1 = __importDefault(require("../modules/userModule/user.controller"));
+var errorHandlingMiddleware_1 = require("../middleware/errorHandlingMiddleware");
+var auth_middleware_1 = __importDefault(require("../middleware/auth.middleware"));
+var validate_middleware_1 = require("../middleware/validate.middleware");
+var auth_validator_1 = require("../validator/auth.validator");
+var role_middleware_1 = __importDefault(require("../middleware/role.middleware"));
+var router = (0, express_1.Router)();
+router.post('/register', (0, validate_middleware_1.validator)(auth_validator_1.registerValidate), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(user_controller_1.default.register));
+router.post('/login', (0, validate_middleware_1.validator)(auth_validator_1.loginValidate), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(user_controller_1.default.logIn));
+router.post('/logout', auth_middleware_1.default, (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(user_controller_1.default.logout));
+router.post('/refresh-token', (0, validate_middleware_1.validator)(auth_validator_1.refreshTokenValidate), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(user_controller_1.default.refreshToken));
+router.post('/create', (0, validate_middleware_1.validator)(auth_validator_1.registerValidate), auth_middleware_1.default, (0, role_middleware_1.default)(['admin']), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(user_controller_1.default.createUser));
+router.put('/update', (0, validate_middleware_1.validator)(auth_validator_1.updateValidate), auth_middleware_1.default, (0, role_middleware_1.default)(['admin']), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(user_controller_1.default.updateUser));
+router.delete('/delete', (0, validate_middleware_1.validator)(auth_validator_1.checkUserId), auth_middleware_1.default, (0, role_middleware_1.default)(['admin']), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(user_controller_1.default.deleteUser));
+router.get('/getAll', auth_middleware_1.default, (0, role_middleware_1.default)(['admin']), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(user_controller_1.default.getAllUsers));
+router.get('/getById', (0, validate_middleware_1.validator)(auth_validator_1.checkUserId), auth_middleware_1.default, (0, role_middleware_1.default)(['admin']), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(user_controller_1.default.getUserById));
+exports.default = router;
