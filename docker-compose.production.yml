@@ -48,10 +48,8 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./nginx/certificate.crt:/etc/nginx/certificate.crt:ro
-      - ./nginx/private.key:/etc/nginx/private.key:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/ssl/private
     networks:
       - chemical_network
     healthcheck:
