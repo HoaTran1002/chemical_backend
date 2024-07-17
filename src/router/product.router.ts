@@ -34,7 +34,7 @@ router.patch(
   errAsyncHandlerMiddleware(ProductCotroller.updateProduct)
 )
 router.post('/getById', validator<IProduct>(checkProductId), errAsyncHandlerMiddleware(ProductCotroller.getByIdProduct))
-router.get(
+router.post(
   '/pagination',
   validator<IPagiNationParams>(productPagiNationParams),
   errAsyncHandlerMiddleware(ProductCotroller.pagination)

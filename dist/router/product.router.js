@@ -19,6 +19,6 @@ router.patch('/update', multer_middleware_1.uploadMemory.fields([
     { name: 'video', maxCount: 5 }
 ]), multer_middleware_1.checkFile, (0, validate_middleware_1.validator)(product_validator_1.productUpdateValidate), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(product_controller_1.default.updateProduct));
 router.post('/getById', (0, validate_middleware_1.validator)(product_validator_1.checkProductId), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(product_controller_1.default.getByIdProduct));
-router.get('/pagination', (0, validate_middleware_1.validator)(product_validator_1.productPagiNationParams), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(product_controller_1.default.pagination));
+router.post('/pagination', (0, validate_middleware_1.validator)(product_validator_1.productPagiNationParams), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(product_controller_1.default.pagination));
 router.delete('/deleteById', (0, validate_middleware_1.validator)(product_validator_1.checkProductId), (0, errorHandlingMiddleware_1.errAsyncHandlerMiddleware)(product_controller_1.default.deleteProductById));
 exports.default = router;
