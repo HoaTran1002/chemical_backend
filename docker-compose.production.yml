@@ -19,27 +19,27 @@ services:
       timeout: 5s
       retries: 5
 
-  # app:
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
-  #   image: hoatran1002/chemical_app:v9
-  #   container_name: chemical_app
-  #   working_dir: /app
-  #   volumes:
-  #     - ./:/app
-  #     - /app/node_modules
-  #   env_file:
-  #     - .env
-  #   ports:
-  #     - "3000:3000"
-  #   networks:
-  #     - chemical_network
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 3 
+  app:
+    depends_on:
+      db:
+        condition: service_healthy
+    image: hoatran1002/chemical_app:v9
+    container_name: chemical_app
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    networks:
+      - chemical_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3 
   app_frontend:
     # depends_on:
     #   - app
