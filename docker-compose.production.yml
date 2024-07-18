@@ -56,7 +56,7 @@ services:
   nginx:
     depends_on:
       - app
-      - app_frontend
+      # - app_frontend
     image: nginx:latest
     container_name: chemical_nginx
     ports:
