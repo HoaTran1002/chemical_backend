@@ -49,7 +49,7 @@ services:
       - ./:/app_frontend
     ports:
       - "8000:8000"
-    networks:
+    networks: 
       - chemical_network
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
