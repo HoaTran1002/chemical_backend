@@ -43,6 +43,8 @@ services:
     container_name: chemical_app_frontend
     volumes:
       - ./:/app_frontend
+    ports:
+      - "8000:8000"
     networks:
       - chemical_network
     healthcheck:
