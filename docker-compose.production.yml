@@ -38,10 +38,23 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+  app_frontend:
+    image: hoatran1002/chemical_frontend:v1
+    container_name: chemical_app_frontend
+    volumes:
+      - ./:/app_frontend
+    networks:
+      - chemical_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   nginx:
     depends_on:
       - app
+      - app_frontend
     image: nginx:latest
     container_name: chemical_nginx
     ports:
