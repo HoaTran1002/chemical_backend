@@ -1,12 +1,6 @@
 version: '3.9'
 
 services:
-  # ubuntu:
-  #   build: 
-  #     context: ./ubuntu
-  #     dockerfile: Dockerfile
-  #   networks:
-  #     - chemical_network
   db:
     image: mysql:8.0
     container_name: chemical_db
@@ -46,6 +40,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3 
+
   app_frontend:
     depends_on:
       - app
@@ -71,12 +66,10 @@ services:
     container_name: chemical_nginx
     ports:
       - "80:80"
-      - "8000:8000"
-      # - "443:443"
+      - "8080:8000"  
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      # - ./nginx/ssl:/etc/ssl/private
     networks:
       - chemical_network
     healthcheck:
