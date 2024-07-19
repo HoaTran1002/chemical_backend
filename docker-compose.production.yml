@@ -1,6 +1,12 @@
 version: '3.9'
 
 services:
+  # ubuntu:
+  #   build: 
+  #     context: ./ubuntu
+  #     dockerfile: Dockerfile
+  #   networks:
+  #     - chemical_network
   db:
     image: mysql:8.0
     container_name: chemical_db
@@ -36,13 +42,13 @@ services:
     networks:
       - chemical_network
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://app/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 3 
   app_frontend:
-    # depends_on:
-    #   - app
+    depends_on:
+      - app
     image: hoatran1002/chemical_frontend:v1
     container_name: chemical_app_frontend
     volumes:
@@ -52,14 +58,14 @@ services:
     networks: 
       - chemical_network
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8000 || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 3
 
   nginx:
     depends_on:
-      # - app
+      - app
       - app_frontend
     image: nginx:latest
     container_name: chemical_nginx
