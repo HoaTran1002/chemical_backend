@@ -36,10 +36,10 @@ services:
     networks:
       - chemical_network
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://chemical_app:3000/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 3 
+      retries: 3
 
   app_frontend:
     depends_on:
@@ -53,10 +53,10 @@ services:
     networks: 
       - chemical_network
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://chemical_app_frontend:8000/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 5
 
   nginx:
     depends_on:
@@ -75,7 +75,7 @@ services:
       test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 5
 
 volumes:
   db_data:
