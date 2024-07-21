@@ -41,27 +41,27 @@ services:
       timeout: 5s
       retries: 3
 
-  app_frontend:
-    depends_on:
-      - app
-    image: hoatran1002/chemical_frontend:v1
-    container_name: chemical_app_frontend
-    volumes:
-      - ./:/app_frontend
-    ports:
-      - "8000:8000"
-    networks: 
-      - chemical_network
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:8000 || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+  # app_frontend:
+  #   depends_on:
+  #     - app
+  #   image: hoatran1002/chemical_frontend:v1
+  #   container_name: chemical_app_frontend
+  #   volumes:
+  #     - ./:/app_frontend
+  #   ports:
+  #     - "8000:8000"
+  #   networks: 
+  #     - chemical_network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "curl -f http://localhost:8000 || exit 1"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
 
   nginx:
     depends_on:
       - app
-      - app_frontend
+      # - app_frontend
     image: nginx:latest
     container_name: chemical_nginx
     ports:
